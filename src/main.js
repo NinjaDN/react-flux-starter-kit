@@ -2,4 +2,7 @@ $ = jQuery = require('jquery');
 
 var App = console.log('Hello world from Browserify');
 
-module.exports = App;
+var React = require('react');
+var TodoPage = require('./components/todo/todoPage');
+
+React.render(<TodoPage />, document.getElementById('app'));
