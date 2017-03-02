@@ -9,14 +9,16 @@ var TodoList = React.createClass({
 				<tr>
 					<td>{todo.name}</td>
 					<td>
-						<input type="checkbox" value="false" />
+						<input type="checkbox" value="false" id={todo.id} onClick={this.props.onRemove} />
 					</td>
 				</tr>
 			);
 		};
 		return (
 			<table className="table">
-				{this.props.todos.map(createTodoRow, this)}
+				<tbody>
+					{this.props.todos.map(createTodoRow, this)}
+				</tbody>
 			</table>
 		);
 	}

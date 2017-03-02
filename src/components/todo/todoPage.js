@@ -22,17 +22,18 @@ var TodoPage = React.createClass({
 		this.setState({ name: '' });
 		this.setState({ todos: TodoApi.getAllTodos() });
 	},
-	// deleteTodo: function (id) {
-	// 	TodoApi.deleteTodo(id);
-	// 	this.setState({ todos: TodoApi.getAllTodos() });
-	// },
+	deleteTodo: function (e) {
+		TodoApi.deleteTodo(e.target.id);
+		this.setState({ todos: TodoApi.getAllTodos() });
+		console.log(TodoApi.getAllTodos());
+	},
 	render: function () {
 		return (
 			<div className="container-fluid">
 				<h1>Todo</h1>
 				<TodoForm name={this.state.name} onType={this.setTodoState} onSave={this.createTodo}/>
 				<br/>
-				<TodoList todos={this.state.todos} />
+				<TodoList todos={this.state.todos} onRemove={this.deleteTodo} />
 			</div>
 		);
 	}

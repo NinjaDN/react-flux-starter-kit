@@ -4,7 +4,7 @@ var todos = require('./todoData').todos;
 var _ = require('lodash');
 
 var _generateId = function() {
-	return todos.length + 1;
+	return todos.length + 1 + '';
 };
 
 var _convertToJson = function(item) {
@@ -29,12 +29,11 @@ var TodoApi = {
 			todo.id = _generateId();
 			todos.push(_convertToJson(todo));
 		}
-
 		return todo;
 	},
 
 	deleteTodo: function(id) {
-		_.remove(todos, { id: id});
+		_.remove(todos, { id: _convertToJson(id)});
 	}
 };
 

@@ -46115,7 +46115,7 @@ var todos = require('./todoData').todos;
 var _ = require('lodash');
 
 var _generateId = function() {
-	return todos.length + 1;
+	return todos.length + 1 + '';
 };
 
 var _convertToJson = function(item) {
@@ -46140,12 +46140,11 @@ var TodoApi = {
 			todo.id = _generateId();
 			todos.push(_convertToJson(todo));
 		}
-
 		return todo;
 	},
 
 	deleteTodo: function(id) {
-		_.remove(todos, { id: id});
+		_.remove(todos, { id: _convertToJson(id)});
 	}
 };
 
@@ -46156,15 +46155,15 @@ module.exports = {
 	todos: 
 	[
 		{
-			id: 1, 
+			id: '1', 
 			name: 'Learning React'
 		},	
 		{
-			id: 2, 
+			id: '2', 
 			name: 'Implement Full-text search'
 		},	
 		{
-			id: 3, 
+			id: '3', 
 			name: 'Watching movies'
 		}
 	]
@@ -46206,14 +46205,16 @@ var TodoList = React.createClass({displayName: "TodoList",
 				React.createElement("tr", null, 
 					React.createElement("td", null, todo.name), 
 					React.createElement("td", null, 
-						React.createElement("input", {type: "checkbox", value: "false"})
+						React.createElement("input", {type: "checkbox", value: "false", id: todo.id, onClick: this.props.onRemove})
 					)
 				)
 			);
 		};
 		return (
 			React.createElement("table", {className: "table"}, 
-				this.props.todos.map(createTodoRow, this)
+				React.createElement("tbody", null, 
+					this.props.todos.map(createTodoRow, this)
+				)
 			)
 		);
 	}
@@ -46246,17 +46247,18 @@ var TodoPage = React.createClass({displayName: "TodoPage",
 		this.setState({ name: '' });
 		this.setState({ todos: TodoApi.getAllTodos() });
 	},
-	// deleteTodo: function (id) {
-	// 	TodoApi.deleteTodo(id);
-	// 	this.setState({ todos: TodoApi.getAllTodos() });
-	// },
+	deleteTodo: function (e) {
+		TodoApi.deleteTodo(e.target.id);
+		this.setState({ todos: TodoApi.getAllTodos() });
+		console.log(TodoApi.getAllTodos());
+	},
 	render: function () {
 		return (
 			React.createElement("div", {className: "container-fluid"}, 
 				React.createElement("h1", null, "Todo"), 
 				React.createElement(TodoForm, {name: this.state.name, onType: this.setTodoState, onSave: this.createTodo}), 
 				React.createElement("br", null), 
-				React.createElement(TodoList, {todos: this.state.todos})
+				React.createElement(TodoList, {todos: this.state.todos, onRemove: this.deleteTodo})
 			)
 		);
 	}
